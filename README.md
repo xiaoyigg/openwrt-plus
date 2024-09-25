@@ -33,10 +33,11 @@ https://github.com/pmkol/openwrt-plus/releases
 | PassWall | Dockerman | 网速测试 |
 | Mihomo | Docker | SQM队列管理 |
 | MosDNS | Dockerd | UPnP |
-| 硬盘休眠 | Docker-compose | 带宽监控 |
-| Watchcat | | Socat |
-| Aira2 | | 访问控制 |
-| FRP客户端 | | IP限速 |
+| DDNS | Docker-compose | 带宽监控 |
+| 硬盘休眠 | | Socat |
+| Watchcat | | 访问控制 |
+| Aira2 | | IP限速 |
+| FRP客户端 | | |
 | 网络共享 | | |
 | 网络唤醒 | | |
 | ZeroTier | | |
