@@ -2,7 +2,7 @@
 
 ### NanoPi R4S/R5S/R5C & X86_64 固件下载:
 
-https://github.com/pmkol/openwrt-plus/releases
+[Release version](https://github.com/pmkol/openwrt-plus/releases) | [Lite version](https://github.com/pmkol/openwrt-plus/releases/tag/v23.05.5-lite)
 
 ```
 【首次登陆】
