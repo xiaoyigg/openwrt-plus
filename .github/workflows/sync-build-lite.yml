@@ -164,8 +164,8 @@ jobs:
         body: |
           OpenWrt 23.05 Lite with Kernel 6.11 Enhanced
 
-          Includes a lite selection of plugins:
-          Mihomo, Sing-box, DDNS, SMB, UPnP.
+          Includes a lite selection of packages:
+          Mihomo, Sing-box, WireGuard, DDNS, SMB, UPnP.
         commit: master
         replacesArtifacts: true
         token: ${{ secrets.GITHUB_TOKEN }}
