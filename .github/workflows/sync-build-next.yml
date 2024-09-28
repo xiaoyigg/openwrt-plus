@@ -2,12 +2,6 @@ name: Build sync kernel-6.11
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - master
-    paths:
-      - 'tags/kernel-6.11'
-      - 'tags/v23'
 
 jobs:
   build:
