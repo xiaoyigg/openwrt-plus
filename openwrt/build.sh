@@ -28,16 +28,11 @@ endgroup() {
 ip_info=`curl -sk https://ip.cooluc.com`;
 export isCN=`echo $ip_info | grep -Po 'country_code\":"\K[^"]+'`;
 
-# script url
-if [ "$isCN" = "CN" ]; then
-    export mirror=init.cooluc.com
-else
-    export mirror=init2.cooluc.com
-fi
-
 # github actions - automatically retrieve `github raw` links
 if [ "$(whoami)" = "runner" ] && [ -n "$GITHUB_REPO" ]; then
     export mirror=raw.githubusercontent.com/$GITHUB_REPO/master
+else
+    export mirror=raw.githubusercontent.com/pmkol/openwrt-plus/master
 fi
 
 # apply for sbwml/builder
