@@ -1,4 +1,4 @@
-name: Build sync kernel-6.11 lite
+name: Build sync kernel-6.12 lite
 
 on:
   workflow_dispatch:
@@ -6,7 +6,7 @@ on:
     branches:
       - master
     paths:
-      - 'tags/kernel-6.11'
+      - 'tags/kernel-6.12'
       - 'tags/v23'
 
 jobs:
@@ -162,7 +162,7 @@ jobs:
         allowUpdates: true
         tag: ${{ env.latest_release }}
         body: |
-          OpenWrt 23.05 Lite with Kernel 6.11 Enhanced
+          OpenWrt 23.05 Lite with Kernel 6.12 Enhanced
 
           Includes a lite selection of packages:
           Mihomo, Sing-box, WireGuard, DDNS, SMB, UPnP.
