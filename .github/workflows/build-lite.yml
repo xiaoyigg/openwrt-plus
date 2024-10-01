@@ -1,13 +1,7 @@
-name: Build sync kernel-6.12 lite
+name: Build openwrt lite with kernel-6.12
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - master
-    paths:
-      - 'tags/kernel-6.12'
-      - 'tags/v23'
 
 jobs:
   build:
