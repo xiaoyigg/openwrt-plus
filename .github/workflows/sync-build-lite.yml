@@ -111,7 +111,9 @@ jobs:
         bash <(curl -sS https://raw.githubusercontent.com/${{ github.repository }}/master/openwrt/build.sh) ${{ matrix.tag.type }} ${{ matrix.model }}
         cd openwrt
         tags=$(git describe --abbrev=0 --tags)
+        kernel=$(curl -s "https://raw.githubusercontent.com/${{ github.repository }}/master/tags/kernel-6.12" | awk -F"LINUX_KERNEL_HASH-| =" '/LINUX_KERNEL_HASH/{print $2}')
         echo "latest_release=$tags-lite" >>$GITHUB_ENV
+        echo "latest_kernel=$kernel" >>$GITHUB_ENV
 
     - name: Extensive logs after a failed compilation
       working-directory: /builder
@@ -162,7 +164,7 @@ jobs:
         allowUpdates: true
         tag: ${{ env.latest_release }}
         body: |
-          OpenWrt 23.05 Lite with Kernel 6.12 Enhanced
+          OpenWrt 23.05 Lite with Kernel ${{ env.latest_kernel }} Enhanced
 
           Includes a lite selection of packages:
           Mihomo, Sing-box, WireGuard, DDNS, SMB, UPnP.
