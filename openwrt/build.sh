@@ -28,16 +28,11 @@ endgroup() {
 ip_info=`curl -sk https://ip.cooluc.com`;
 [ -n "$ip_info" ] && export isCN=`echo $ip_info | grep -Po 'country_code\":"\K[^"]+'` || export isCN=US
 
-# script url
-if [ "$isCN" = "CN" ]; then
-    export mirror=init.cooluc.com
-else
-    export mirror=init2.cooluc.com
-fi
-
 # github actions - automatically retrieve `github raw` links
 if [ "$(whoami)" = "runner" ] && [ -n "$GITHUB_REPO" ]; then
     export mirror=raw.githubusercontent.com/$GITHUB_REPO/master
+else
+    export mirror=raw.githubusercontent.com/pmkol/openwrt-plus/master
 fi
 
 # private gitea
@@ -264,6 +259,7 @@ if [ -z "$git_password" ] && [ -z "$private_url" ]; then
 else
     curl -sO https://$mirror/openwrt/scripts/10-custom.sh
 fi
+
 chmod 0755 *sh
 [ "$(whoami)" = "runner" ] && group "patching openwrt"
 bash 00-prepare_base.sh
