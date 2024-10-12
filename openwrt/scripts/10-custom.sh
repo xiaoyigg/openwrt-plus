@@ -32,7 +32,7 @@ fi
 
 # add ddns-go
 git clone https://$github/sirpdboy/luci-app-ddns-go package/new/ddns-go --depth 1
-sed -i '/"description": "Grant UCI access for luci-app-ddns-go",/a \\t\t"order": 50,' package/new/ddns-go/luci-app-ddns-go/root/usr/share/rpcd/acl.d/luci-app-ddns-go.json
+sed -i '3 a\\t\t"order": 50,' package/new/ddns-go/luci-app-ddns-go/root/usr/share/rpcd/acl.d/luci-app-ddns-go.json
 
 # add eqosplus
 git clone https://$github/pmkol/openwrt-eqosplus --depth 1
