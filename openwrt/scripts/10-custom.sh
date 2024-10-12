@@ -13,10 +13,10 @@ if [ "$MINIMAL_BUILD" = "y" ]; then
         curl -Lso files/etc/mihomo/run/GeoIP.dat https://$github/MetaCubeX/meta-rules-dat/releases/download/latest/geoip-lite.dat
         curl -Lso files/etc/mihomo/run/geoip.metadb https://$github/MetaCubeX/meta-rules-dat/releases/download/latest/geoip-lite.metadb
         curl -Lso files/etc/mihomo/run/ASN.mmdb https://$github/MetaCubeX/meta-rules-dat/releases/download/latest/GeoLite2-ASN.mmdb
-        curl -Lso metacubexd-gh-pages.tar.gz https://$github/MetaCubeX/metacubexd/archive/refs/heads/gh-pages.tar.gz
-        tar zxf metacubexd-gh-pages.tar.gz
-        rm metacubexd-gh-pages.tar.gz
-        mv metacubexd-gh-pages files/etc/mihomo/run/ui/metacubexd
+        curl -Lso metacubexd-1.151.0.tar.gz https://$github/MetaCubeX/metacubexd/archive/refs/tags/v1.151.0.tar.gz
+        tar zxf metacubexd-1.151.0.tar.gz
+        rm metacubexd-1.151.0.tar.gz
+        mv metacubexd-1.151.0 files/etc/mihomo/run/ui/metacubexd
     fi
 else
     if curl -s "https://$mirror/openwrt/23-config-common" | grep -q "^CONFIG_PACKAGE_luci-app-mihomo=y"; then
