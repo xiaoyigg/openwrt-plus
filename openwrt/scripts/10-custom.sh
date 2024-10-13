@@ -5,7 +5,7 @@
 # add mihomo
 rm -rf package/new/helloworld/luci-app-mihomo
 rm -rf package/new/helloworld/mihomo
-git clone https://$github/pmkol/openwrt-mihomo package/new/openwrt-mihomo
+git clone https://$github/pmkol/openwrt-mihomo package/new/openwrt-mihomo --depth 1
 if [ "$MINIMAL_BUILD" = "y" ]; then
     if curl -s "https://$mirror/openwrt/23-config-minimal-common" | grep -q "^CONFIG_PACKAGE_luci-app-mihomo=y"; then
         mkdir -p files/etc/mihomo/run/ui
@@ -35,11 +35,11 @@ git clone https://$github/sirpdboy/luci-app-ddns-go package/new/ddns-go --depth 
 sed -i '3 a\\t\t"order": 50,' package/new/ddns-go/luci-app-ddns-go/root/usr/share/rpcd/acl.d/luci-app-ddns-go.json
 
 # add eqosplus
-git clone https://$github/pmkol/openwrt-eqosplus --depth 1
+git clone https://$github/pmkol/openwrt-eqosplus package/new/openwrt-eqosplus --depth 1
 
 # change geodata
 rm -rf package/new/helloworld/v2ray-geodata
-git clone https://$github/sbwml/v2ray-geodata package/new/helloworld/v2ray-geodata
+git clone https://$github/sbwml/v2ray-geodata package/new/helloworld/v2ray-geodata --depth 1
 sed -i 's#Loyalsoldier/geoip/releases/latest/download/geoip-only-cn-private.dat#MetaCubeX/meta-rules-dat/releases/download/latest/geoip-lite.dat#g; s#Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat#MetaCubeX/meta-rules-dat/releases/download/latest/geosite.dat#g' package/new/helloworld/v2ray-geodata/Makefile
 sed -i '/geoip_api/s#Loyalsoldier/v2ray-rules-dat#pmkol/geodata-lite#' package/new/helloworld/luci-app-passwall/root/usr/share/passwall/rule_update.lua
 sed -i '/geosite_api/s#Loyalsoldier/v2ray-rules-dat#MetaCubeX/meta-rules-dat#' package/new/helloworld/luci-app-passwall/root/usr/share/passwall/rule_update.lua
