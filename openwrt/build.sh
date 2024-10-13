@@ -154,6 +154,7 @@ if [ "$TESTING_KERNEL" = "y" ]; then
 else
     kmodpkg_name=$(echo $(echo -e "$get_kernel_version" | awk -F'HASH-' '{print $2}' | awk '{print $1}')-1-$(echo $kmod_hash))
 fi
+[ "$TESTING_KERNEL" = "y" ] && [ "$MINIMAL_BUILD" = "y" ] && kmodpkg_name=$(echo $(echo -e "$get_kernel_version" | awk -F'HASH-' '{print $2}' | awk '{print $1}')-1-$(echo $kmod_hash))
 echo -e "${GREEN_COLOR}Kernel: $kmodpkg_name ${RES}"
 
 echo -e "${GREEN_COLOR}Date: $CURRENT_DATE${RES}\r\n"
@@ -388,7 +389,7 @@ fi
 # test kernel
 [ "$TESTING_KERNEL" = "y" ] && [ "$platform" = "bcm53xx" ] && sed -i '1i\# CONFIG_PACKAGE_kselftests-bpf is not set\n# CONFIG_PACKAGE_perf is not set\n' .config
 [ "$TESTING_KERNEL" = "y" ] && sed -i '1i\# Test kernel\nCONFIG_TESTING_KERNEL=y\n' .config
-[ "$TESTING_KERNEL" = "y" ] && [ "$version" = "rc2" ] && sed -i '/CONFIG_KERNEL_PREEMPT_RT/d' .config
+[ "$TESTING_KERNEL" = "y" ] && [ "$MINIMAL_BUILD" = "y" ] && [ "$version" = "rc2" ] && sed -i '/CONFIG_KERNEL_PREEMPT_RT/d' .config
 
 # not all kmod
 [ "$NO_KMOD" = "y" ] && sed -i '/CONFIG_ALL_KMODS=y/d; /CONFIG_ALL_NONSHARED=y/d' .config
