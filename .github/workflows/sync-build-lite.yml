@@ -167,10 +167,10 @@ jobs:
           OpenWrt 23.05 Lite with Kernel ${{ env.latest_kernel }} Enhanced
 
           Includes a lite selection of packages:
-          Mihomo, Sing-box, WireGuard, DDNS, SMB, UPnP.
+          Mihomo, Sing-box, WireGuard, DDNS, SMB, UPnP, EQos, Socat.
         commit: master
         replacesArtifacts: true
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.OPENWRT_WORKFLOW_TOKEN }}
         artifacts: ${{ env.WORKDIR }}/rom/*
 
     - name: Release kernel modules
@@ -184,10 +184,10 @@ jobs:
           OpenWrt 23.05 Lite with Kernel ${{ env.latest_kernel }} Enhanced
 
           Includes a lite selection of packages:
-          Mihomo, Sing-box, WireGuard, DDNS, SMB, UPnP.
+          Mihomo, Sing-box, WireGuard, DDNS, SMB, UPnP, EQos, Socat.
         commit: master
         replacesArtifacts: true
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.OPENWRT_WORKFLOW_TOKEN }}
         artifacts: |
           ${{ env.WORKDIR }}/openwrt/*-*.tar.gz
 
