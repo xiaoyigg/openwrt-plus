@@ -153,7 +153,7 @@ pushd target/linux/generic/hack-$kernel_version
 popd
 
 # linux-rt - i915
-if [ "$TESTING_KERNEL" = "y" ]; then
+if [ "$TESTING_KERNEL" = "y" ] && [ "$version" = "snapshots-24.10" ]; then
     pushd target/linux/generic/hack-6.12
         curl -Os https://$mirror/openwrt/patch/kernel-6.12/linux-rt/012-0001-drm-i915-Use-preempt_disable-enable_rt-where-recomme.patch
         curl -Os https://$mirror/openwrt/patch/kernel-6.12/linux-rt/012-0002-drm-i915-Don-t-disable-interrupts-on-PREEMPT_RT-duri.patch
