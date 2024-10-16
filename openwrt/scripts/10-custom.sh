@@ -47,7 +47,7 @@ git clone https://github.com/hudra0/qosmate --depth 1
 git clone https://github.com/pmkol/luci-app-qosmate --depth 1
 
 # add luci-app-tailscale
-https://github.com/asvow/luci-app-tailscale
+git clone https://github.com/asvow/luci-app-tailscale --depth 1
 
 # add luci-app-upnp
 rm -rf feeds/luci/applications/luci-app-upnp
