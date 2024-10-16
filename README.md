@@ -1,51 +1,20 @@
-# OpenWrt Plus 23.05
+# NanoPi R4S/R5S/R5C & X86_64 OpenWrt 简易构建脚本存档
 
-### NanoPi R4S/R5S/R5C & X86_64 固件下载:
-
-[Plus version](https://github.com/pmkol/openwrt-plus/releases) | [Lite version](https://github.com/pmkol/openwrt-plus/releases/tag/v23.05.5-lite)
-
-```
-【首次登陆】
-地址：10.0.0.1（默认）
-用户：root
-密码：空
-
-【分区挂载】
-系统/磁盘管理 将系统盘剩余空间创建新分区
-系统/挂载点   启用新分区并挂载至/opt目录
-```
+### 存档来自：https://init2.cooluc.com
 
 ---------------
 
-## 固件说明
+## 基于 Linux 6.6/6.12 LTS 固件下载:
 
-- 优化系统内核
-  - [x] Full cone NAT
-  - [x] TCP BBRv3
-  - [x] TCP Brutal
-  - [x] LLVM-BPF
-  - [x] Shortcut-FE
-- 使用 OpenWrt+ImmortalWrt 软件源，支持更多插件的在线安装与升级
-- 最小化集成常用插件，修复多处上游插件BUG
-- Lite版本仅包含 Mihomo, Sing-box, WireGuard, DDNS, SMB, UPnP
+#### NanoPi R4S: https://r4s.cooluc.com
 
-  Plus版本包含以下插件：
+#### NanoPi R5S/R5C: https://r5s.cooluc.com
 
-| ⚓ 服务 | 🗳️ Docker  | 🩺 网络  |
-|  :----  |  :----  |  :----  |
-| PassWall | Dockerman | 网速测试 |
-| Mihomo | Docker | SQM队列管理 |
-| MosDNS | Dockerd | UPnP |
-| DDNS | Docker-compose | 带宽监控 |
-| 硬盘休眠 | | Socat |
-| Watchcat | | 访问控制 |
-| Aira2 | | IP限速 |
-| FRP客户端 | | |
-| 网络共享 | | |
-| 网络唤醒 | | |
-| ZeroTier | | |
+#### X86_64: https://x86.cooluc.com
 
-自定义预装插件建议fork上游原项目，以免因本项目未及时同步导致编译失败
+#### Snapshot 24.10: https://snapshot.cooluc.com
+
+#### 构建来源: https://github.com/sbwml/builder
 
 ---------------
 
@@ -144,8 +113,8 @@ export ENABLE_DPDK=y
 export BUILD_FAST=y
 ```
 
-### 构建 Lite 版本
-##### 仅包含少量必备第三方插件，接近官方 OpenWrt 固件
+### 构建 Minimal 版本
+##### 不包含第三方插件，接近官方 OpenWrt 固件
 ##### 只需在构建固件前执行以下命令即可构建 Minimal 版本
 
 ```
@@ -160,6 +129,64 @@ export MINIMAL_BUILD=y
 export LAN=10.0.0.1
 ```
 
+### 使用 uhttpd 轻量 web 引擎
+##### 固件默认使用 Nginx（quic） 作为页面引擎，只需在构建固件前执行以下命令即可使用 uhttpd 取代 nginx
+##### Nginx 在具备公网的环境下可以提供更丰富的功能支持
+
+```
+export ENABLE_UHTTPD=y
+```
+
+### 禁用全模块编译（For developers）
+##### 启用该标志时，固件仅编译 config 指定的软件包和内核模块，但固件不再支持安装内核模块（opkg install kmod-xxx），强制安装模块将会导致内核崩溃
+##### 最大的可能性降低 OpenWrt 的编译耗时，适用于开发者调试构建
+
+```
+export NO_KMOD=y
+```
+
+---------------
+
+## 构建 OpenWrt 23.05 最新 Releases
+
+### nanopi-r4s
+```shell
+# linux-6.6
+bash <(curl -sS https://init2.cooluc.com/build.sh) rc2 nanopi-r4s
+```
+
+### nanopi-r5s/r5c
+```shell
+# linux-6.6
+bash <(curl -sS https://init2.cooluc.com/build.sh) rc2 nanopi-r5s
+```
+
+### x86_64
+```shell
+# linux-6.6
+bash <(curl -sS https://init2.cooluc.com/build.sh) rc2 x86_64
+```
+
+## 构建 OpenWrt 24.10 开发版（24.10-SNAPSHOT）
+
+### nanopi-r4s
+```shell
+# linux-6.12
+bash <(curl -sS https://init2.cooluc.com/build.sh) dev nanopi-r4s
+```
+
+### nanopi-r5s/r5c
+```shell
+# linux-6.12
+bash <(curl -sS https://init2.cooluc.com/build.sh) dev nanopi-r5s
+```
+
+### x86_64
+```shell
+# linux-6.12
+bash <(curl -sS https://init2.cooluc.com/build.sh) dev x86_64
+```
+
 -----------------
 
 # 基于本仓库进行自定义构建 - 本地编译
@@ -170,16 +197,17 @@ export LAN=10.0.0.1
 
 ### 二、修改构建脚本文件：`openwrt/build.sh`（使用 Github Actions 构建时无需更改）
 
-将脚本默认 github raw 链接替换为你的 github raw 链接（不带 https://），像这样 `raw.githubusercontent.com/你的用户名/openwrt-plus/master`
+将 init.cooluc.com 脚本默认连接替换为你的 github raw 连接（不带 https://），像这样 `raw.githubusercontent.com/你的用户名/r4s_build_script/master`
 
 ```diff
-# github actions - automatically retrieve `github raw` links
-if [ "$(whoami)" = "runner" ] && [ -n "$GITHUB_REPO" ]; then
-    export mirror=raw.githubusercontent.com/$GITHUB_REPO/master
-else
--    export mirror=raw.githubusercontent.com/pmkol/openwrt-plus/master
-+    export mirror=raw.githubusercontent.com/你的用户名/openwrt-plus/master
-fi
+ # script url
+ if [ "$isCN" = "CN" ]; then
+-    export mirror=init.cooluc.com
++    export mirror=raw.githubusercontent.com/你的用户名/r4s_build_script/master
+ else
+-    export mirror=init2.cooluc.com
++    export mirror=raw.githubusercontent.com/你的用户名/r4s_build_script/master
+ fi
 ```
 
 ### 三、在本地 Linux 执行基于你自己仓库的构建脚本，即可编译所需固件
@@ -187,19 +215,19 @@ fi
 #### nanopi-r4s openwrt-23.05
 ```shell
 # linux-6.6
-bash <(curl -sS https://raw.githubusercontent.com/你的用户名/openwrt-plus/master/openwrt/build.sh) rc2 nanopi-r4s
+bash <(curl -sS https://raw.githubusercontent.com/你的用户名/r4s_build_script/master/openwrt/build.sh) rc2 nanopi-r4s
 ```
 
 #### nanopi-r5s/r5c openwrt-23.05
 ```shell
 # linux-6.6
-bash <(curl -sS https://raw.githubusercontent.com/你的用户名/openwrt-plus/master/openwrt/build.sh) rc2 nanopi-r5s
+bash <(curl -sS https://raw.githubusercontent.com/你的用户名/r4s_build_script/master/openwrt/build.sh) rc2 nanopi-r5s
 ```
 
 #### x86_64 openwrt-23.05
 ```shell
 # linux-6.6
-bash <(curl -sS https://raw.githubusercontent.com/你的用户名/openwrt-plus/master/openwrt/build.sh) rc2 x86_64
+bash <(curl -sS https://raw.githubusercontent.com/你的用户名/r4s_build_script/master/openwrt/build.sh) rc2 x86_64
 ```
 
 -----------------
