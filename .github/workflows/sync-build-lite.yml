@@ -1,4 +1,4 @@
-name: Build sync kernel-6.12 lite
+name: Build sync kernel-6.6 lite
 
 on:
   workflow_dispatch:
@@ -19,8 +19,8 @@ jobs:
           - nanopi-r5s
           - x86_64
         tag:
-          - type: dev
-            version: openwrt-24.10
+          - type: rc2
+            version: openwrt-23.05
 
     steps:
     - name: Checkout
