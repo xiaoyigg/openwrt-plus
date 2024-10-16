@@ -46,6 +46,9 @@ git clone https://$github/pmkol/openwrt-eqosplus package/new/openwrt-eqosplus --
 git clone https://github.com/hudra0/qosmate --depth 1
 git clone https://github.com/pmkol/luci-app-qosmate --depth 1
 
+# add luci-app-tailscale
+https://github.com/asvow/luci-app-tailscale
+
 # add luci-app-upnp
 rm -rf feeds/luci/applications/luci-app-upnp
 git clone https://$github/pmkol/luci-app-upnp feeds/luci/applications/luci-app-upnp --depth 1
