@@ -27,19 +27,19 @@
   - [x] Shortcut-FE
 - 使用 OpenWrt+ImmortalWrt 软件源，支持更多插件的在线安装与升级
 - 最小化集成常用插件，修复多处上游插件BUG
-- Lite版本仅包含 Mihomo, Sing-box, WireGuard, DDNS, SMB, UPnP, EQos, Socat, ZeroTier
+- Lite版本仅包含 Mihomo, Sing-box, WireGuard, DDNS, SMB, UPnP, QoSmate, Socat, ZeroTier
 
   Plus版本包含以下插件：
 
 | ⚓ 服务 | 🗳️ Docker  | 🩺 网络  |
 |  :----  |  :----  |  :----  |
 | PassWall | Dockerman | 网速测试 |
-| Mihomo | Docker | SQM队列管理 |
-| MosDNS | Dockerd | UPnP |
-| DDNS | Docker-compose | 带宽监控 |
-| 硬盘休眠 | | Socat |
-| Watchcat | | 访问控制 |
-| Aira2 | | IP限速 |
+| Mihomo | Docker | UPnP |
+| MosDNS | Dockerd | 带宽监控 |
+| DDNS | Docker-compose | Socat |
+| 硬盘休眠 | | QoSmate |
+| Watchcat | | |
+| Aira2 | | |
 | FRP客户端 | | |
 | 网络共享 | | |
 | 网络唤醒 | | |
