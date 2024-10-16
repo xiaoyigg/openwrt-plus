@@ -28,16 +28,11 @@ endgroup() {
 ip_info=`curl -sk https://ip.cooluc.com`;
 [ -n "$ip_info" ] && export isCN=`echo $ip_info | grep -Po 'country_code\":"\K[^"]+'` || export isCN=US
 
-# script url
-if [ "$isCN" = "CN" ]; then
-    export mirror=init.cooluc.com
-else
-    export mirror=init2.cooluc.com
-fi
-
 # github actions - automatically retrieve `github raw` links
 if [ "$(whoami)" = "runner" ] && [ -n "$GITHUB_REPO" ]; then
     export mirror=raw.githubusercontent.com/$GITHUB_REPO/master
+else
+    export mirror=raw.githubusercontent.com/pmkol/openwrt-plus/master
 fi
 
 # private gitea
@@ -263,6 +258,7 @@ if [ -n "$git_password" ] && [ -n "$private_url" ]; then
 else
     curl -sO https://$mirror/openwrt/scripts/10-custom.sh
 fi
+curl -sO https://$mirror/openwrt/scripts/11-fix-vendor.sh
 chmod 0755 *sh
 [ "$(whoami)" = "runner" ] && group "patching openwrt"
 bash 00-prepare_base.sh
@@ -272,6 +268,9 @@ bash 03-convert_translation.sh
 bash 04-fix_kmod.sh
 bash 05-fix-source.sh
 [ -f "10-custom.sh" ] && bash 10-custom.sh
+if [ "$platform" = "x86_64" ] || [ "$platform" = "armv8" ]; then
+    bash 11-fix-vendor.sh
+fi
 [ "$(whoami)" = "runner" ] && endgroup
 
 if [ "$USE_GCC14" = "y" ] || [ "$USE_GCC15" = "y" ] && [ "$version" = "rc2" ]; then
