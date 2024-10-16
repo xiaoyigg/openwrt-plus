@@ -43,11 +43,11 @@ sed -i '3 a\\t\t"order": 50,' package/new/ddns-go/luci-app-ddns-go/root/usr/shar
 git clone https://$github/pmkol/openwrt-eqosplus package/new/openwrt-eqosplus --depth 1
 
 # add qosmate
-git clone https://github.com/hudra0/qosmate --depth 1
-git clone https://github.com/pmkol/luci-app-qosmate --depth 1
+git clone https://github.com/hudra0/qosmate package/new/qosmate --depth 1
+git clone https://github.com/pmkol/luci-app-qosmate package/new/luci-app-qosmate --depth 1
 
 # add luci-app-tailscale
-git clone https://github.com/asvow/luci-app-tailscale --depth 1
+git clone https://github.com/asvow/luci-app-tailscale package/new/luci-app-tailscale --depth 1
 
 # add luci-app-upnp
 rm -rf feeds/luci/applications/luci-app-upnp
