@@ -28,11 +28,16 @@ endgroup() {
 ip_info=`curl -sk https://ip.cooluc.com`;
 [ -n "$ip_info" ] && export isCN=`echo $ip_info | grep -Po 'country_code\":"\K[^"]+'` || export isCN=US
 
+# script url
+if [ "$isCN" = "CN" ]; then
+    export mirror=init.cooluc.com
+else
+    export mirror=init2.cooluc.com
+fi
+
 # github actions - automatically retrieve `github raw` links
 if [ "$(whoami)" = "runner" ] && [ -n "$GITHUB_REPO" ]; then
     export mirror=raw.githubusercontent.com/$GITHUB_REPO/master
-else
-    export mirror=raw.githubusercontent.com/pmkol/openwrt-plus/master
 fi
 
 # private gitea
@@ -124,11 +129,10 @@ export \
     ENABLE_DPDK=$ENABLE_DPDK \
     ENABLE_GLIBC=$ENABLE_GLIBC \
     ENABLE_LRNG=$ENABLE_LRNG \
-    KERNEL_CLANG_LTO=$KERNEL_CLANG_LTO \
-    TESTING_KERNEL=$TESTING_KERNEL \
+    KERNEL_CLANG_LTO=$KERNEL_CLANG_LTO
 
 # kernel version
-[ "$TESTING_KERNEL" = "y" ] && export kernel_version=6.12 || export kernel_version=6.6
+[ "$version" = "snapshots-24.10" ] && export kernel_version=6.12 || export kernel_version=6.6
 
 # print version
 echo -e "\r\n${GREEN_COLOR}Building $branch${RES}\r\n"
@@ -149,12 +153,11 @@ else
 fi
 get_kernel_version=$(curl -s https://$mirror/tags/kernel-$kernel_version)
 kmod_hash=$(echo -e "$get_kernel_version" | awk -F'HASH-' '{print $2}' | awk '{print $1}' | tail -1 | md5sum | awk '{print $1}')
-if [ "$TESTING_KERNEL" = "y" ]; then
+if [ "$version" = "snapshots-24.10" ]; then
     kmodpkg_name=$(echo $(echo -e "$get_kernel_version" | awk -F'HASH-' '{print $2}' | awk '{print $1}')~$(echo $kmod_hash)-r1)
 else
     kmodpkg_name=$(echo $(echo -e "$get_kernel_version" | awk -F'HASH-' '{print $2}' | awk '{print $1}')-1-$(echo $kmod_hash))
 fi
-[ "$TESTING_KERNEL" = "y" ] && [ "$MINIMAL_BUILD" = "y" ] && kmodpkg_name=$(echo $(echo -e "$get_kernel_version" | awk -F'HASH-' '{print $2}' | awk '{print $1}')-1-$(echo $kmod_hash))
 echo -e "${GREEN_COLOR}Kernel: $kmodpkg_name ${RES}"
 
 echo -e "${GREEN_COLOR}Date: $CURRENT_DATE${RES}\r\n"
@@ -260,7 +263,6 @@ if [ -n "$git_password" ] && [ -n "$private_url" ]; then
 else
     curl -sO https://$mirror/openwrt/scripts/10-custom.sh
 fi
-curl -sO https://$mirror/openwrt/scripts/11-fix-vendor.sh
 chmod 0755 *sh
 [ "$(whoami)" = "runner" ] && group "patching openwrt"
 bash 00-prepare_base.sh
@@ -270,9 +272,6 @@ bash 03-convert_translation.sh
 bash 04-fix_kmod.sh
 bash 05-fix-source.sh
 [ -f "10-custom.sh" ] && bash 10-custom.sh
-if [ "$platform" = "x86_64" ] || [ "$platform" = "armv8" ]; then
-    bash 11-fix-vendor.sh
-fi
 [ "$(whoami)" = "runner" ] && endgroup
 
 if [ "$USE_GCC14" = "y" ] || [ "$USE_GCC15" = "y" ] && [ "$version" = "rc2" ]; then
@@ -386,10 +385,10 @@ fi
 # uhttpd
 [ "$ENABLE_UHTTPD" = "y" ] && sed -i '/nginx/d' .config && echo 'CONFIG_PACKAGE_ariang=y' >> .config
 
-# test kernel
-[ "$TESTING_KERNEL" = "y" ] && [ "$platform" = "bcm53xx" ] && sed -i '1i\# CONFIG_PACKAGE_kselftests-bpf is not set\n# CONFIG_PACKAGE_perf is not set\n' .config
-[ "$TESTING_KERNEL" = "y" ] && sed -i '1i\# Test kernel\nCONFIG_TESTING_KERNEL=y\n' .config
-[ "$TESTING_KERNEL" = "y" ] && [ "$MINIMAL_BUILD" = "y" ] && [ "$version" = "rc2" ] && sed -i '/CONFIG_KERNEL_PREEMPT_RT/d' .config
+# snapshots-24.10
+[ "$version" = "snapshots-24.10" ] && [ "$platform" = "bcm53xx" ] && sed -i '1i\# CONFIG_PACKAGE_kselftests-bpf is not set\n# CONFIG_PACKAGE_perf is not set\n' .config
+[ "$version" = "snapshots-24.10" ] && sed -i '1i\# Test kernel\nCONFIG_TESTING_KERNEL=y\n' .config
+[ "$version" = "rc2" ] && sed -i '/CONFIG_TESTING_KERNEL/d' .config
 
 # not all kmod
 [ "$NO_KMOD" = "y" ] && sed -i '/CONFIG_ALL_KMODS=y/d; /CONFIG_ALL_NONSHARED=y/d' .config
