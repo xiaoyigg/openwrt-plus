@@ -42,9 +42,13 @@ sed -i '3 a\\t\t"order": 50,' package/new/ddns-go/luci-app-ddns-go/root/usr/shar
 # add eqosplus
 git clone https://$github/pmkol/openwrt-eqosplus package/new/openwrt-eqosplus --depth 1
 
+# add qosmate
+git clone https://github.com/hudra0/qosmate --depth 1
+git clone https://github.com/pmkol/luci-app-qosmate --depth 1
+
 # add luci-app-upnp
 rm -rf feeds/luci/applications/luci-app-upnp
-git clone https://$github/pmkol/luci-app-upnp feeds/luci/applications/luci-app-upnp
+git clone https://$github/pmkol/luci-app-upnp feeds/luci/applications/luci-app-upnp --depth 1
 
 # change geodata
 rm -rf package/new/helloworld/v2ray-geodata
@@ -52,9 +56,6 @@ git clone https://$github/sbwml/v2ray-geodata package/new/helloworld/v2ray-geoda
 sed -i 's#Loyalsoldier/geoip/releases/latest/download/geoip-only-cn-private.dat#MetaCubeX/meta-rules-dat/releases/download/latest/geoip-lite.dat#g; s#Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat#MetaCubeX/meta-rules-dat/releases/download/latest/geosite.dat#g' package/new/helloworld/v2ray-geodata/Makefile
 sed -i '/geoip_api/s#Loyalsoldier/v2ray-rules-dat#pmkol/geodata-lite#' package/new/helloworld/luci-app-passwall/root/usr/share/passwall/rule_update.lua
 sed -i '/geosite_api/s#Loyalsoldier/v2ray-rules-dat#MetaCubeX/meta-rules-dat#' package/new/helloworld/luci-app-passwall/root/usr/share/passwall/rule_update.lua
-
-# fix kernel 6.12 kmod repository
-[ "$TESTING_KERNEL" = "y" ] && [ "$version" = "rc2" ] && sed -i 's#raw.githubusercontent.com/sbwml#raw.githubusercontent.com/pmkol#g' package/new/default-settings/default/zzz-default-settings
 
 # configure default-settings
 sed -i 's/openwrt\/luci/pmkol\/openwrt-plus/g' package/new/luci-theme-argon/luci-theme-argon/luasrc/view/themes/argon/footer.htm
