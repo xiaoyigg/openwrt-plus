@@ -55,7 +55,7 @@ git clone https://$github/pmkol/luci-app-upnp feeds/luci/applications/luci-app-u
 
 # bump iproute2 version
 rm -rf package/network/utils/iproute2
-cp -a ../master/package/network/utils/iproute2 package/network/utils/iproute2
+cp -a ../master/openwrt/package/network/utils/iproute2 package/network/utils/iproute2
 
 # change geodata
 rm -rf package/new/helloworld/v2ray-geodata
