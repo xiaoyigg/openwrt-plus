@@ -53,6 +53,10 @@ git clone https://github.com/asvow/luci-app-tailscale package/new/luci-app-tails
 rm -rf feeds/luci/applications/luci-app-upnp
 git clone https://$github/pmkol/luci-app-upnp feeds/luci/applications/luci-app-upnp --depth 1
 
+# bump iproute2 version
+rm -rf package/network/utils/iproute2
+cp -a ../master/package/network/utils/iproute2 package/network/utils/iproute2
+
 # change geodata
 rm -rf package/new/helloworld/v2ray-geodata
 git clone https://$github/sbwml/v2ray-geodata package/new/helloworld/v2ray-geodata --depth 1
