@@ -53,6 +53,11 @@ git clone https://github.com/asvow/luci-app-tailscale package/new/luci-app-tails
 rm -rf feeds/luci/applications/luci-app-upnp
 git clone https://$github/pmkol/luci-app-upnp feeds/luci/applications/luci-app-upnp --depth 1
 
+# bump haproxy version
+rm -rf feeds/packages/net/haproxy
+cp -a ../master/packages/net/haproxy feeds/packages/net/haproxy
+sed -i '/ADDON+=USE_QUIC_OPENSSL_COMPAT=1/d' feeds/packages/net/haproxy/Makefile
+
 # bump iproute2 version
 rm -rf package/network/utils/iproute2
 cp -a ../master/openwrt/package/network/utils/iproute2 package/network/utils/iproute2
