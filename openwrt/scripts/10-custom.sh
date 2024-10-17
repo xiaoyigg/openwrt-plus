@@ -7,6 +7,12 @@ curl -s https://raw.githubusercontent.com/pmkol/openwrt-lite/patch/linux/hack-6.
 rm -f target/linux/generic/backport-6.6/611-01-v6.11-udp-Allow-GSO-transmit-from-devices-with-no-checksum.patch
 rm -f target/linux/generic/backport-6.6/611-03-v6.11-udp-Fall-back-to-software-USO-if-IPv6-extension-head.patch
 
+# fallback uboot-rockchip version
+if [ "$platform" = "rk3568" ]; then
+    rm -rf package/boot/uboot-rockchip
+    git clone https://$github/pmkol/package_boot_uboot-rockchip package/boot/uboot-rockchip
+fi
+
 # add mihomo
 rm -rf package/new/helloworld/luci-app-mihomo
 rm -rf package/new/helloworld/mihomo
