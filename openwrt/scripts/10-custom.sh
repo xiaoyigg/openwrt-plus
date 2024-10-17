@@ -10,7 +10,7 @@ rm -f target/linux/generic/backport-6.6/611-03-v6.11-udp-Fall-back-to-software-U
 # fallback uboot-rockchip version
 if [ "$platform" = "rk3568" ]; then
     rm -rf package/boot/uboot-rockchip
-    git clone https://$github/pmkol/package_boot_uboot-rockchip package/boot/uboot-rockchip
+    git clone https://$github/pmkol/package_boot_uboot-rockchip package/boot/uboot-rockchip --depth 1
 fi
 
 # add mihomo
@@ -34,10 +34,10 @@ else
         mkdir -p files/etc/mihomo/run/ui
         curl -Lso files/etc/mihomo/run/geoip.metadb https://$github/MetaCubeX/meta-rules-dat/releases/download/latest/geoip-lite.metadb
         curl -Lso files/etc/mihomo/run/ASN.mmdb https://$github/MetaCubeX/meta-rules-dat/releases/download/latest/GeoLite2-ASN.mmdb
-        curl -Lso metacubexd-gh-pages.tar.gz https://$github/MetaCubeX/metacubexd/archive/refs/heads/gh-pages.tar.gz
-        tar zxf metacubexd-gh-pages.tar.gz
-        rm metacubexd-gh-pages.tar.gz
-        mv metacubexd-gh-pages files/etc/mihomo/run/ui/metacubexd
+        curl -Lso metacubexd-1.151.0.tar.gz https://$github/MetaCubeX/metacubexd/archive/refs/tags/v1.151.0.tar.gz
+        tar zxf metacubexd-1.151.0.tar.gz
+        rm metacubexd-1.151.0.tar.gz
+        mv metacubexd-1.151.0 files/etc/mihomo/run/ui/metacubexd
     fi
 fi
 
