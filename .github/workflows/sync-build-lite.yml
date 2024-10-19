@@ -1,13 +1,7 @@
-name: Build sync kernel-6.12 lite
+name: Build sync kernel-6.6 lite
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - master
-    paths:
-      - 'tags/kernel-6.12'
-      - 'tags/v23'
 
 jobs:
   build:
@@ -107,11 +101,11 @@ jobs:
       continue-on-error: true
       run: |
         export GITHUB_REPO=${{ github.repository }}
-        export TESTING_KERNEL=y KERNEL_CLANG_LTO=y BUILD_FAST=y ENABLE_UHTTPD=y ENABLE_LTO=y ENABLE_LRNG=y ENABLE_BPF=y MINIMAL_BUILD=y USE_GCC14=y ENABLE_MOLD=y
+        export KERNEL_CLANG_LTO=y BUILD_FAST=y ENABLE_UHTTPD=y ENABLE_LTO=y ENABLE_LRNG=y ENABLE_BPF=y MINIMAL_BUILD=y USE_GCC14=y ENABLE_MOLD=y
         bash <(curl -sS https://raw.githubusercontent.com/${{ github.repository }}/master/openwrt/build.sh) ${{ matrix.tag.type }} ${{ matrix.model }}
         cd openwrt
         tags=$(git describe --abbrev=0 --tags)
-        kernel=$(curl -s "https://raw.githubusercontent.com/${{ github.repository }}/master/tags/kernel-6.12" | awk -F"LINUX_KERNEL_HASH-| =" '/LINUX_KERNEL_HASH/{print $2}')
+        kernel=$(curl -s "https://raw.githubusercontent.com/${{ github.repository }}/master/tags/kernel-6.6" | awk -F"LINUX_KERNEL_HASH-| =" '/LINUX_KERNEL_HASH/{print $2}')
         echo "latest_release=$tags-lite" >>$GITHUB_ENV
         echo "latest_kernel=$kernel" >>$GITHUB_ENV
 
@@ -167,34 +161,8 @@ jobs:
           OpenWrt 23.05 Lite with Kernel ${{ env.latest_kernel }} Enhanced
 
           Includes a lite selection of packages:
-          Mihomo, Sing-box, WireGuard, DDNS, SMB, UPnP, EQos, Socat.
+          Mihomo, Sing-box, WireGuard, DDNS, SMB, UPnP, QoSmate, Socat, Zerotier.
         commit: master
         replacesArtifacts: true
         token: ${{ secrets.OPENWRT_WORKFLOW_TOKEN }}
         artifacts: ${{ env.WORKDIR }}/rom/*
-
-    - name: Release kernel modules
-      if: ${{ matrix.model != 'nanopi-r4s' }}
-      uses: pmkol/release-action@main
-      with:
-        name: OpenWrt-${{ env.latest_release }}
-        allowUpdates: true
-        tag: ${{ env.latest_release }}
-        body: |
-          OpenWrt 23.05 Lite with Kernel ${{ env.latest_kernel }} Enhanced
-
-          Includes a lite selection of packages:
-          Mihomo, Sing-box, WireGuard, DDNS, SMB, UPnP, EQos, Socat.
-        commit: master
-        replacesArtifacts: true
-        token: ${{ secrets.OPENWRT_WORKFLOW_TOKEN }}
-        artifacts: |
-          ${{ env.WORKDIR }}/openwrt/*-*.tar.gz
-
-    - name: Sync kernel modules
-      if: ${{ matrix.model != 'nanopi-r4s' }}
-      uses: peter-evans/repository-dispatch@v3
-      with:
-        token: ${{ secrets.OPENWRT_WORKFLOW_TOKEN }}
-        repository: pmkol/openwrt_core
-        event-type: sync

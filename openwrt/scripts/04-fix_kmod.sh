@@ -3,10 +3,13 @@
 # Fix build for linux-6.6/6.12
 
 # cryptodev-linux
+mkdir -p package/kernel/cryptodev-linux/patches
 if [ "$version" = "rc2" ]; then
-    mkdir -p package/kernel/cryptodev-linux/patches
-    curl -s https://$mirror/openwrt/patch/packages-patches/cryptodev-linux/001-Fix-build-for-Linux-6.3-rc1.patch > package/kernel/cryptodev-linux/patches/001-Fix-build-for-Linux-6.3-rc1.patch
-    curl -s https://$mirror/openwrt/patch/packages-patches/cryptodev-linux/002-fix-build-for-linux-6.7-rc1.patch > package/kernel/cryptodev-linux/patches/002-fix-build-for-linux-6.7-rc1.patch
+    curl -s https://$mirror/openwrt/patch/packages-patches/cryptodev-linux/6.6/001-Fix-build-for-Linux-6.3-rc1.patch > package/kernel/cryptodev-linux/patches/001-Fix-build-for-Linux-6.3-rc1.patch
+    curl -s https://$mirror/openwrt/patch/packages-patches/cryptodev-linux/6.6/002-fix-build-for-linux-6.7-rc1.patch > package/kernel/cryptodev-linux/patches/002-fix-build-for-linux-6.7-rc1.patch
+else
+    curl -s https://$mirror/openwrt/patch/packages-patches/cryptodev-linux/6.12/0005-Fix-cryptodev_verbosity-sysctl-for-Linux-6.11-rc1.patch > package/kernel/cryptodev-linux/patches/0005-Fix-cryptodev_verbosity-sysctl-for-Linux-6.11-rc1.patch
+    curl -s https://$mirror/openwrt/patch/packages-patches/cryptodev-linux/6.12/0006-Exclude-unused-struct-since-Linux-6.5.patch > package/kernel/cryptodev-linux/patches/0006-Exclude-unused-struct-since-Linux-6.5.patch
 fi
 
 # gpio-button-hotplug
@@ -71,14 +74,10 @@ if [ "$version" = "rc2" ]; then
 fi
 
 # openvswitch
-if [ "$TESTING_KERNEL" = "y" ]; then
-    sed -i '/ovs_kmod_openvswitch_depends/a\\t\ \ +kmod-sched-act-sample \\' feeds/packages/net/openvswitch/Makefile
-fi
+[ "$version" = "snapshots-24.10" ] && sed -i '/ovs_kmod_openvswitch_depends/a\\t\ \ +kmod-sched-act-sample \\' feeds/packages/net/openvswitch/Makefile
 
 # rtpengine
-if [ "$TESTING_KERNEL" = "y" ] && [ "$version" = "snapshots-24.10" ]; then
-    curl -s https://$mirror/openwrt/patch/packages-patches/rtpengine/900-fix-linux-6.12-11.5.1.18.patch > feeds/telephony/net/rtpengine/patches/900-fix-linux-6.12-11.5.1.18.patch
-fi
+[ "$version" = "snapshots-24.10" ] && curl -s https://$mirror/openwrt/patch/packages-patches/rtpengine/900-fix-linux-6.12-11.5.1.18.patch > feeds/telephony/net/rtpengine/patches/900-fix-linux-6.12-11.5.1.18.patch
 
 # ubootenv-nvram - 6.12 (openwrt-23.05.5)
 mkdir -p package/kernel/ubootenv-nvram/patches
@@ -91,7 +90,7 @@ pushd feeds/packages
   # fix linux-6.6
   [ "$version" = "rc2" ] && curl -s https://$mirror/openwrt/patch/packages-patches/xr_usb_serial_common/900-fix-linux-6.6.patch > libs/xr_usb_serial_common/patches/900-fix-linux-6.6.patch
   # fix linux-6.12
-  [ "$TESTING_KERNEL" = "y" ] && curl -s https://$mirror/openwrt/patch/packages-patches/xr_usb_serial_common/0002-fix-kernel-6.12-builds.patch > libs/xr_usb_serial_common/patches/0002-fix-kernel-6.12-builds.patch
+  [ "$version" = "snapshots-24.10" ] && curl -s https://$mirror/openwrt/patch/packages-patches/xr_usb_serial_common/0002-fix-kernel-6.12-builds.patch > libs/xr_usb_serial_common/patches/0002-fix-kernel-6.12-builds.patch
   # coova-chilli
   [ "$version" = "rc2" ] && curl -s https://github.com/openwrt/packages/commit/9975e855adcfc24939080a5e0279e0a90553347b.patch | patch -p1
   [ "$version" = "rc2" ] && curl -s https://github.com/openwrt/packages/commit/c0683d3f012096fc7b2fbe8b8dc81ea424945e9b.patch | patch -p1
@@ -118,7 +117,6 @@ if [ "$version" = "rc2" ]; then
     cp -a ../master/routing/batman-adv feeds/routing/batman-adv
 fi
 # fix build with linux-6.12
-curl -s https://$mirror/openwrt/patch/packages-patches/batman-adv/900-netdev_features-convert-NETIF_F_NETNS_LOCAL-to-dev-netns_local.patch > feeds/routing/batman-adv/patches/900-netdev_features-convert-NETIF_F_NETNS_LOCAL-to-dev-netns_local.patch
 curl -s https://$mirror/openwrt/patch/packages-patches/batman-adv/901-fix-linux-6.12rc2-builds.patch > feeds/routing/batman-adv/patches/901-fix-linux-6.12rc2-builds.patch
 
 # bcm53xx
