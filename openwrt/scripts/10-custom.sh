@@ -50,7 +50,7 @@ git clone https://$github/pmkol/openwrt-eqosplus package/new/openwrt-eqosplus --
 
 # add qosmate
 git clone https://github.com/hudra0/qosmate package/new/qosmate --depth 1
-sed -i 's/option enabled '1'/option enabled '0'/g' package/new/qosmate/etc/config/qosmate
+sed -i "s/option enabled '1'/option enabled '0'/g" package/new/qosmate/etc/config/qosmate
 git clone https://github.com/pmkol/luci-app-qosmate package/new/luci-app-qosmate --depth 1
 
 # add luci-app-tailscale
