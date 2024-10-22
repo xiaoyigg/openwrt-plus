@@ -55,6 +55,9 @@ git clone https://$github/pmkol/luci-app-qosmate package/new/luci-app-qosmate --
 
 # add luci-app-tailscale
 git clone https://$github/asvow/luci-app-tailscale package/new/luci-app-tailscale --depth 1
+rm -rf feeds/packages/net/tailscale
+cp -a ../master/packages/net/tailscale feeds/packages/net/tailscale
+sed -i '/\/etc\/init\.d\/tailscale/d;/\/etc\/config\/tailscale/d;' feeds/packages/net/tailscale/Makefile
 
 # add luci-app-upnp
 rm -rf feeds/luci/applications/luci-app-upnp
