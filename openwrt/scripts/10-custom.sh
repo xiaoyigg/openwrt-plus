@@ -49,12 +49,15 @@ sed -i '3 a\\t\t"order": 50,' package/new/ddns-go/luci-app-ddns-go/root/usr/shar
 git clone https://$github/pmkol/openwrt-eqosplus package/new/openwrt-eqosplus --depth 1
 
 # add qosmate
-git clone https://github.com/hudra0/qosmate package/new/qosmate --depth 1
-sed -i 's/option enabled '1'/option enabled '0'/g' package/new/qosmate/etc/config/qosmate
-git clone https://github.com/pmkol/luci-app-qosmate package/new/luci-app-qosmate --depth 1
+git clone https://$github/hudra0/qosmate package/new/qosmate --depth 1
+sed -i "s/option enabled '1'/option enabled '0'/g" package/new/qosmate/etc/config/qosmate
+git clone https://$github/pmkol/luci-app-qosmate package/new/luci-app-qosmate --depth 1
 
 # add luci-app-tailscale
-git clone https://github.com/asvow/luci-app-tailscale package/new/luci-app-tailscale --depth 1
+git clone https://$github/asvow/luci-app-tailscale package/new/luci-app-tailscale --depth 1
+rm -rf feeds/packages/net/tailscale
+cp -a ../master/packages/net/tailscale feeds/packages/net/tailscale
+sed -i '/\/etc\/init\.d\/tailscale/d;/\/etc\/config\/tailscale/d;' feeds/packages/net/tailscale/Makefile
 
 # add luci-app-upnp
 rm -rf feeds/luci/applications/luci-app-upnp
@@ -65,10 +68,6 @@ rm -rf feeds/packages/net/haproxy
 cp -a ../master/packages/net/haproxy feeds/packages/net/haproxy
 sed -i '/ADDON+=USE_QUIC_OPENSSL_COMPAT=1/d' feeds/packages/net/haproxy/Makefile
 
-# bump iproute2 version
-rm -rf package/network/utils/iproute2
-cp -a ../master/openwrt/package/network/utils/iproute2 package/network/utils/iproute2
-
 # change geodata
 rm -rf package/new/helloworld/v2ray-geodata
 git clone https://$github/sbwml/v2ray-geodata package/new/helloworld/v2ray-geodata --depth 1
@@ -76,7 +75,11 @@ sed -i 's#Loyalsoldier/geoip/releases/latest/download/geoip-only-cn-private.dat#
 sed -i '/geoip_api/s#Loyalsoldier/v2ray-rules-dat#pmkol/geodata-lite#' package/new/helloworld/luci-app-passwall/root/usr/share/passwall/rule_update.lua
 sed -i '/geosite_api/s#Loyalsoldier/v2ray-rules-dat#MetaCubeX/meta-rules-dat#' package/new/helloworld/luci-app-passwall/root/usr/share/passwall/rule_update.lua
 
-# configure default-settings
+# default settings
+if [ "$MINIMAL_BUILD" = "y" ]; then
+    rm -rf package/new/default-settings
+    git clone https://$github/pmkol/default-settings package/new/default-settings -b lite --depth 1
+fi
 sed -i 's/openwrt\/luci/pmkol\/openwrt-plus/g' package/new/luci-theme-argon/luci-theme-argon/luasrc/view/themes/argon/footer.htm
 sed -i 's/openwrt\/luci/pmkol\/openwrt-plus/g' package/new/luci-theme-argon/luci-theme-argon/luasrc/view/themes/argon/footer_login.htm
 sed -i 's/openwrt\/luci/pmkol\/openwrt-plus/g' feeds/luci/themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/footer.ut
