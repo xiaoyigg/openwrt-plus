@@ -4,8 +4,6 @@
 
 # fallback udp_offload to kernel 6.6.43
 curl -s https://raw.githubusercontent.com/pmkol/openwrt-lite/patch/linux/hack-6.6/099-udp_offload-backto-43.patch > target/linux/generic/hack-6.6/099-udp_offload-backto-43.patch
-rm -f target/linux/generic/backport-6.6/611-01-v6.11-udp-Allow-GSO-transmit-from-devices-with-no-checksum.patch
-rm -f target/linux/generic/backport-6.6/611-03-v6.11-udp-Fall-back-to-software-USO-if-IPv6-extension-head.patch
 
 # fallback uboot-rockchip version
 if [ "$platform" = "rk3568" ]; then
